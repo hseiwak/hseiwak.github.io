@@ -1,73 +1,307 @@
-<!DOCTYPE html >
+<!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="theme-color" content="black"/>
-<meta name="msapplication-TileColor" content="#da532c"/>
-<meta name="msapplication-navbutton-color" content="black"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>HSEIWAK</title>
+<title>Hseiwak</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-* {
-box-sizing: border-box;
-margin: 0;
-padding: 0;
-outline: none;
-}
-
-body {
-background: rgb(251, 244, 234) url(https://storage.googleapis.com/subtlepatterns-production/designers/subtlepatterns/uploads/blue-snow.png);
-max-width: 100vw;
-position: relative;
+				
+*{box-sizing:border-box;}
+html,body{
 display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
+position: absolute;
+left:0; right:0;
+top:0; bottom:0;
+font-family: Arial;
 }
 
-#container {
-height: auto;
-border: 0px solid red;
-margin-top: 20px;
-position: relative;
+input{transition: 10s linear;}
+
+#container{
+border: 1px solid black;
+padding:10px;
 display: flex;
-flex-direction: column;
-justify-content: flex-start;
+align-items: center;
+height:1.5em;
+width:35ch;
+padding: 15px 0 15px 0;
+}
+
+input[type="range"]{
+-webkit-appearance: none;
+border-radius:5px;
+background: #d3d3d3; outline: none;
+}
+
+input,hr{
+width: 10em; height: 5px;
+}
+
+
+input[type="range"]::-webkit-slider-thumb{
+-webkit-appearance: none; appearance: none;
+width: 10px; height: 10px;
+border-radius:10px;
+background: black;
+cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+-webkit-appearance: none; appearance: none;
+width: 10px; height: 10px;
+border-radius:10px;
+background: #04AA6D; cursor: pointer;
+}
+
+svg{
+fill:black;
+}
+
+#play{
+display: flex;
 align-items: center;
 }
 
-.lol{
-font: 25px Courier New;
-color: #8764d7;
-background-color: #0707073d;
-animation: pulse 2s linear infinite alternate;  
+svg{
+width:2ch;
+height:2ch;
 }
 
 
-@keyframes pulse{
-from{transform: scale(0,0)}
-to{transform: scale(2,2)}
+
+span{margin-left:1ch;}
+
+#src{width:100%;display:flex; justify-content:center;}
+#src{margin-bottom:10px;}
+#src input,button{
+height:2em;				
+outline:none;
+border:1px solid black;			
+padding:0;	
 }
 
-@media (orientation:portrait) {
-#container { width: 95%;}
+#src input{
+width:30ch;	
+				
 }
 
-@media (orientation:landscape) {
-#container { width: 75%; }
+
+
+.ls,.rs{
+background-color: white;
+border: 1px solid black;
+border-radius: 5px;
+width: calc(100% - 30px);
+padding: 5px;
+margin: 0 10px;
+display: flex;
+justify-content: space-between;
+align-items: center;
 }
+
+#increase, #decrease{
+width: 30px;
+height: 30px;
+cursor: pointer;								
+}
+
+.rs svg{
+width: 100%;
+height: 100%;
+opacity: 0.5;				
+}
+
+
+.hover{
+background: yellow;						
+}
+
+
+
+
 </style>
 </head>
-<body data-nosnippet>
-<div id="container">
-  <div class="lol">WHAZZZUPPPPP :(</div>
+<body>
+<div id="src">
+<input>
+<button>&nbsp; ADD &nbsp;</button>
 </div>
+<div id="container">
+<span id="play"></span>
+<span id="start">00:00</span>
+<input type="range" value="0">
+<audio preload="metadata">
+</audio>
+<span id="end">NaN</span>
+</div>
+
+<div class="fontsize rs">
+<div id="decrease">-</div>
+<div id="fontsize">15 px</div>
+<div id="increase">+</div>
+</div>
+
+
 <script>
-let create = (x)=> document.createElement(x),
-select = (x, y= document)=> y.querySelector(x),
-selectAll = (x, y = document)=> y.querySelectorAll(x);
+let
+create= document.createElement.bind(document),
+select= document.querySelector.bind(document),
+selectAll= document.querySelector.bind(document);
+
+
+let audio= select("audio"),
+    input= select("#container input");
+
+
+
+let src= select("#src input");
+
+select("button").onclick=()=>{
+audio.src= src.value;
+audio.load();		
+};
+
+
+
+let playx= select("#play");
+let jan= false;
+
+
+
+let play= `<svg viewBox="0 0 32 32">
+				     <path d="M6 4l20 12-20 12z"></path></svg>`,
+pause= `<svg viewBox="0 0 32 32">
+        <path d="M4 4h10v24h-10zM18 4h10v24h-10z"></path></svg>`;
+
+playx.innerHTML= play;
+
+playx.onclick=()=>{
+if(!jan){
+playx.innerHTML= pause;
+audio.play();
+jan= true;
+}
+else{
+playx.innerHTML= play;
+audio.pause();				
+jan= false;				
+}
+};
+
+
+audio.onloadedmetadata=()=>{
+duration= audio.duration;
+duration= new Date(duration*1000).toISOString().substr(11,8).split(":");
+h= duration[0], m= duration[1], s= duration[2];
+if(h==0) time= m+":"+s;
+if(h>0) time= h+":"+m+":"+s;
+input.min= "0";
+input.max= audio.duration;
+select("#end").innerHTML= time;
+};
+
+
+audio.ontimeupdate=()=>{
+let x= new Date(audio.currentTime*1000).toISOString().substr(11,8).split(":");
+let H= x[0], M= x[1], S= x[2];
+
+if(H==0) TIME= M+":"+S;
+if(H>0) TIME= H+":"+M+":"+S;
+
+input.value= audio.currentTime;		
+
+select("#start").innerHTML= TIME;
+
+if(audio.currentTime==audio.duration){
+input.value=0;		
+select("#start").innerHTML= "00:00";		
+playx.innerHTML= play;				
+}
+
+};
+
+
+
+input.oninput=()=>{ audio.currentTime= input.value; audio.play();	};
+
+
+let minus= `<svg viewBox="0 0 64 64">
+<path d="M2 26h60v12H2z"/>
+</svg>`;			
+					
+let plus= `	
+<svg viewBox="0 0 64 64">
+<path d="M38 26V2H26v24H2v12h24v24h12V38h24V26z"/>
+</svg>`;
+
+let decr= `<svg viewBox="0 0 16 16"><g fill="black">
+<path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 
+1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 
+2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+<path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 
+1h-7A.5.5 0 0 1 4 8z"/></g>
+</svg>`;
+
+
+
+let incr= `<svg viewBox="0 0 16 16"><g fill="black">
+<path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 
+1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 
+2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 
+0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></g>
+</svg>`;
+
+
+let decrease= select("#decrease"),
+increase= select("#increase"),
+fontsize= select("#fontsize");
+
+
+decrease.innerHTML= decr;
+increase.innerHTML= incr;
+
+let _fontsize;
+
+function adjustFont(x){
+if(_fontsize < 6) _fontsize= 6;
+_fontsize= _fontsize + x;
+fontsize.innerHTML= _fontsize + "px";
+notepad.style.fontSize= _fontsize+"px";				
+}
+
+
+
+let _timer;
+
+decrease.ontouchstart= function(e){
+this.classList.add("hover");
+_timer= setInterval(()=>{
+adjustFont(-1);
+}, 50);
+return false;
+};
+
+
+increase.ontouchstart= function(e){
+this.classList.add("hover");
+_timer= setInterval(()=>{
+adjustFont(1);
+}, 50);
+return false;
+};
+
+
+document.body.ontouchend=()=>{
+increase.classList.remove("hover");
+decrease.classList.remove("hover");
+clearInterval(_timer);
+//return false;
+};
+
+
 </script>
 </body>
 </html>
