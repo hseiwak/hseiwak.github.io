@@ -1,73 +1,73 @@
 <!DOCTYPE html >
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="theme-color" content="black"/>
-  <meta name="msapplication-TileColor" content="#da532c"/>
-  <meta name="msapplication-navbutton-color" content="black"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta charset="UTF-8">
+<meta name="theme-color" content="black"/>
+<meta name="msapplication-TileColor" content="#da532c"/>
+<meta name="msapplication-navbutton-color" content="black"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KD HTML Template</title> <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      outline: none;
-    }
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KD HTML Template</title> <style>
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+outline: none;
+}
 
-    body {
-      background: rgb(251, 244, 234) url("");
-      min-width: 100vw;
-      max-width: 100vw;
-      min-height: 100vh;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-    }
+body {
+background: rgb(251, 244, 234) url("");
+min-width: 100vw;
+max-width: 100vw;
+min-height: 100vh;
+position: relative;
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+align-items: center;
+}
 
-    #container {
-      height: auto;
-      border: 1px solid red;
-      margin-top: 20px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-    }
+#container {
+height: auto;
+border: 0px solid red;
+margin-top: 20px;
+position: relative;
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+align-items: center;
+}
+
+.lol{
+font: 25px Courier New;
+color: #8764d7;
+animation: pulse 2s linear infinte alternate;  
+}
+
+
+@keyframes{
+from{transform: scale(1,1)}
+to{transform: scale(0,0);
+}
 
 @media (orientation:portrait) {
-      #container {
-        width: 95%;
-      }
-
-      body {
-        background-size: 35%;
-      }
-
-    }
+#container { width: 95%;}
+}
 
 @media (orientation:landscape) {
-      #container {
-        width: 75%;
-      }
-
-      body {
-        background-size: 50%;
-      }
-
-    }
-  </style>
+#container { width: 75%; }
+}
+</style>
 </head>
 <body data-nosnippet>
-  <div id="container">
-  whatsupppppppp
-  </div>
-  <script>
-    let create = (x)=> document.createElement(x), select = (x, y = document)=> y.querySelector(x), selectAll = (x, y = document)=> y.querySelectorAll(x);
-  </script>
+<div id="container">
+  <div class="lol">WHAZZZUPPPPP :(</div>
+</div>
+<script>
+let create = (x)=> document.createElement(x),
+select = (x, y= document)=> y.querySelector(x),
+selectAll = (x, y = document)=> y.querySelectorAll(x);
+</script>
 </body>
 </html>
