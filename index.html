@@ -198,32 +198,39 @@ input.max= audio.duration;
 select("#end").innerHTML= time;
 };
 
+
+function formatTime(time){
+let x= new Date(time*1000);
+x= x.toISOString().substr(11,8).split(":");
+let H= x[0], M= x[1], S= x[2],TIME="";
+
+if(H==0) TIME= M+":"+S;
+if(H>0) TIME= H+":"+M+":"+S;	
+
+return TIME;
+}
+
+
 let currenttime= select("#currenttime");
 
 audio.ontimeupdate=()=>{
-let x= new Date(audio.currentTime*1000).toISOString().substr(11,8).split(":");
-let H= x[0], M= x[1], S= x[2];
-
-if(H==0) TIME= M+":"+S;
-if(H>0) TIME= H+":"+M+":"+S;
-
 input.value= audio.currentTime;		
-
-select("#start").innerHTML= TIME;
+select("#start").innerHTML= formatTime(audio.currentTime);
 
 if(audio.currentTime==audio.duration){
 input.value=0;		
-select("#start").innerHTML= "00:00";		
+currenttime.innerHTML=select("#start").innerHTML= "00:00";		
 playx.innerHTML= play;				
 }
 
-currenttime.innerHTML= audio.currentTime;
+currenttime.innerHTML= formatTime(audio.currentTime);
 
 };
 
 
 
 input.oninput=()=>{
+currenttime.innerHTML=select("#start").innerHTML= formatTime(input.value);
 audio.currentTime= input.value;
 audio.play();
 };
@@ -269,8 +276,9 @@ let dur= 0;
 function seekAudio(x){
 /*if(dur<audio.duration) dur= 0;
 if(dur>audio.duration) dur= audio.duration;*/
+currenttime.innerHTML=select("#start").innerHTML=  formatTime(audio.currentTime + x);
 audio.currentTime= audio.currentTime + x;
-audio.load(); audio.play();
+//audio.load(); audio.play();
 }
 
 
