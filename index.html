@@ -198,6 +198,7 @@ input.max= audio.duration;
 select("#end").innerHTML= time;
 };
 
+let currenttime= select("#currenttime");
 
 audio.ontimeupdate=()=>{
 let x= new Date(audio.currentTime*1000).toISOString().substr(11,8).split(":");
@@ -216,11 +217,16 @@ select("#start").innerHTML= "00:00";
 playx.innerHTML= play;				
 }
 
+currenttime.innerHTML= audio.currentTime;
+
 };
 
 
 
-input.oninput=()=>{ audio.currentTime= input.value; audio.play();	};
+input.oninput=()=>{
+audio.currentTime= input.value;
+audio.play();
+};
 
 
 let minus= `<svg viewBox="0 0 64 64">
@@ -252,8 +258,7 @@ let incr= `<svg viewBox="0 0 16 16"><g fill="black">
 
 
 let decrease= select("#decrease"),
-increase= select("#increase"),
-currenttime= select("#currenttime");
+increase= select("#increase");
 
 
 decrease.innerHTML= decr;
@@ -265,7 +270,7 @@ function seekAudio(x){
 /*if(dur<audio.duration) dur= 0;
 if(dur>audio.duration) dur= audio.duration;*/
 audio.currentTime= audio.currentTime + x;
-currenttime.innerHTML= audio.currentTime;
+audio.load(); audio.play();
 }
 
 
