@@ -89,7 +89,7 @@ width:30ch;
 
 
 
-.ls,.rs{
+.seek{
 background-color: white;
 border: 1px solid black;
 border-radius: 5px;
@@ -107,7 +107,7 @@ height: 30px;
 cursor: pointer;								
 }
 
-.rs svg{
+.seek svg{
 width: 100%;
 height: 100%;
 opacity: 0.5;				
@@ -137,12 +137,13 @@ background: yellow;
 <span id="end">NaN</span>
 </div>
 
-<div class="fontsize rs">
+<div class="seek">
 <div id="decrease">-</div>
-<div id="fontsize">15 px</div>
+<div id="currenttime">00:00</div>
 <div id="increase">+</div>
 </div>
 
+</div>
 
 <script>
 let
@@ -150,12 +151,7 @@ create= document.createElement.bind(document),
 select= document.querySelector.bind(document),
 selectAll= document.querySelector.bind(document);
 
-
-let audio= select("audio"),
-    input= select("#container input");
-
-
-
+let audio= select("audio"), input= select("#container input");
 let src= select("#src input");
 
 select("button").onclick=()=>{
@@ -257,19 +253,19 @@ let incr= `<svg viewBox="0 0 16 16"><g fill="black">
 
 let decrease= select("#decrease"),
 increase= select("#increase"),
-fontsize= select("#fontsize");
+currenttime= select("#currenttime");
 
 
 decrease.innerHTML= decr;
 increase.innerHTML= incr;
 
-let _fontsize;
+let dur= 0;
 
-function adjustFont(x){
-if(_fontsize < 6) _fontsize= 6;
-_fontsize= _fontsize + x;
-fontsize.innerHTML= _fontsize + "px";
-notepad.style.fontSize= _fontsize+"px";				
+function seekAudio(x){
+/*if(dur<audio.duration) dur= 0;
+if(dur>audio.duration) dur= audio.duration;*/
+audio.currentTime= audio.currentTime + x;
+currenttime.innerHTML= audio.currentTime;
 }
 
 
@@ -279,7 +275,7 @@ let _timer;
 decrease.ontouchstart= function(e){
 this.classList.add("hover");
 _timer= setInterval(()=>{
-adjustFont(-1);
+seekAudio(-5);
 }, 50);
 return false;
 };
@@ -288,7 +284,7 @@ return false;
 increase.ontouchstart= function(e){
 this.classList.add("hover");
 _timer= setInterval(()=>{
-adjustFont(1);
+seekAudio(5);
 }, 50);
 return false;
 };
