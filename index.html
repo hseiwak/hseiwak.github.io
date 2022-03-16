@@ -1,316 +1,341 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Hseiwak</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-				
-*{box-sizing:border-box;}
-html,body{
+<meta charset="UTF-8">
+<meta name="theme-color" content="black"/>
+<meta name="msapplication-TileColor" content="#da532c"/>
+<meta name="msapplication-navbutton-color" content="black"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Audio Player</title>
+
+<style>				
+*{
+box-sizing: border-box;
+margin:0; padding:0; 
+outline: none;
+}	
+
+body{
+background-color: rgb(251,244,234);
+background-image: url(https://kawiesh.eu.org/resources/papyrus.png);
+min-width: 100vw; 
+max-width: 100vw; 
+min-height: 100vh;
+position: relative;
 display: flex;
 flex-direction: column;
 justify-content: center;
 align-items: center;
-position: absolute;
-left:0; right:0;
-top:0; bottom:0;
-font-family: Arial;
 }
 
-input{transition: 10s linear;}
-
 #container{
-border: 1px solid black;
-padding:10px;
+height: auto;
+border: 1px inset red;
+border-radius: 10px;
+background: pink;
+padding: 20px 0;
+position: relative;
 display: flex;
+flex-direction: column;
+justify-content: flex-start;
 align-items: center;
-height:1.5em;
-width:35ch;
-padding: 15px 0 15px 0;
 }
 
 input[type="range"]{
 -webkit-appearance: none;
+outline: none;
 border-radius:5px;
-background: #d3d3d3; outline: none;
-}
-
-input,hr{
-width: 10em; height: 5px;
+background: green;
 }
 
 
 input[type="range"]::-webkit-slider-thumb{
--webkit-appearance: none; appearance: none;
-width: 10px; height: 10px;
-border-radius:10px;
-background: black;
+-webkit-appearance: none;
+appearance: none;
+width: 10px;
+height: 10px;
+border-radius: 100%;
+background: green;
 cursor: pointer;
 }
 
 input[type="range"]::-moz-range-thumb {
 -webkit-appearance: none; appearance: none;
-width: 10px; height: 10px;
-border-radius:10px;
-background: #04AA6D; cursor: pointer;
-}
-
-svg{
-fill:black;
-}
-
-#play{
-display: flex;
-align-items: center;
-}
-
-svg{
-width:2ch;
-height:2ch;
+width: 10px;
+height: 10px;
+border-radius: 100%;
+background: green;
+cursor: pointer;
 }
 
 
-
-span{margin-left:1ch;}
-
-#src{width:100%;display:flex; justify-content:center;}
-#src{margin-bottom:10px;}
-#src input,button{
-height:2em;				
-outline:none;
-border:1px solid black;			
-padding:0;	
-}
-
-#src input{
-width:30ch;	
-				
-}
-
-
-
-.seek{
-background-color: white;
-border: 1px solid black;
-border-radius: 5px;
-width: calc(100% - 30px);
-padding: 5px;
-margin: 0 10px;
+#source,#player,#seek{
+width: 400px;
 display: flex;
 justify-content: space-between;
 align-items: center;
+margin-bottom: 10px;
 }
 
-#increase, #decrease{
-width: 30px;
+input.source{
 height: 30px;
-cursor: pointer;								
+border: 2px solid black;
+padding: 4px;
+width: calc(100% - 45px);
 }
 
-.seek svg{
+#add{
+height: 30px;
+width: 40px;
+border: 2px solid black;
+}
+
+
+#player{
+justify-content: center;
+background: white;
+border: 2px solid green;
+padding: 5px;
+}
+
+
+#play{
+width: 20px;
+height: 20px;
+cursor: pointer;
+}
+
+.time,.totaltime{
+margin: 0 5px;
+}
+
+.progress{
+width: 250px;
+height: 2px;
+color: black;
+}
+
+
+input.interval{
+margin: 0 5px;
+border: 2px solid black;
+text-align: center;
+}
+
+input.interval,
+#increase,
+#decrease{
+height: 30px;
+width: 30px;
+background: white;
+border-radius: 4px;
+cursor: pointer;
+}
+
+
+svg{
 width: 100%;
 height: 100%;
-opacity: 0.5;				
+}
+
+#increase.hover,
+#decrease.hover{
+background: yellow;
+transform: scale(1.5,1.5);
 }
 
 
-.hover{
-background: yellow;						
-}
 
 
+@media (orientation:portrait){
+#container{width: 95%;}
+}	
 
+@media (orientation:landscape){
+#container{width: 75%;}
+}	
 
 </style>
 </head>
-<body>
-<div id="src">
-<input>
-<button>&nbsp; ADD &nbsp;</button>
-</div>
+<body data-nosnippet>
 <div id="container">
-<span id="play"></span>
-<span id="start">00:00</span>
-<input type="range" value="0">
-<audio preload="metadata">
-</audio>
-<span id="end">NaN</span>
-</div>
 
-<div class="seek">
-<div id="decrease">-</div>
-<div id="currenttime">00:00</div>
-<div id="increase">+</div>
-</div>
+	<div id="source">
+	<input class="source">
+	<button id="add">ADD</button>
+	</div>	
+		
+	<div id="player">
+	<span id="play"></span>
+	<span class="time">00:00</span>
+	<input class="progress" type="range" value="0">
+	<audio class="player" preload="metadata"></audio>
+	<span class="totaltime">NaN</span>
+	</div>
+	
+	<div id="seek">
+	<div id="decrease">-</div>
+	<div class="interval">
+		<input class="interval" value="5" type="number">
+		sec.</div>
+	<div id="increase">+</div>
+	</div>
+
 
 </div>
-
 <script>
-let
-create= document.createElement.bind(document),
-select= document.querySelector.bind(document),
-selectAll= document.querySelector.bind(document);
+let create= (x)=> document.createElement(x),
+select= (x,y=document)=> y.querySelector(x),
+selectAll= (x,y=document)=> y.querySelectorAll(x);
 
-let audio= select("audio"), input= select("#container input");
-let src= select("#src input");
-
-select("button").onclick=()=>{
-audio.src= src.value;
-audio.load();		
-};
-
-
-
-let playx= select("#play");
-let jan= false;
-
-
-
-let play= `<svg viewBox="0 0 32 32">
-				     <path d="M6 4l20 12-20 12z"></path></svg>`,
-pause= `<svg viewBox="0 0 32 32">
-        <path d="M4 4h10v24h-10zM18 4h10v24h-10z"></path></svg>`;
-
-playx.innerHTML= play;
-
-playx.onclick=()=>{
-if(!jan){
-playx.innerHTML= pause;
-audio.play();
-jan= true;
-}
-else{
-playx.innerHTML= play;
-audio.pause();				
-jan= false;				
-}
-};
-
-
-audio.onloadedmetadata=()=>{
-duration= audio.duration;
-duration= new Date(duration*1000).toISOString().substr(11,8).split(":");
-h= duration[0], m= duration[1], s= duration[2];
-if(h==0) time= m+":"+s;
-if(h>0) time= h+":"+m+":"+s;
-input.min= "0";
-input.max= audio.duration;
-select("#end").innerHTML= time;
-};
-
-
-function formatTime(time){
-let x= new Date(time*1000);
-x= x.toISOString().substr(11,8).split(":");
-let H= x[0], M= x[1], S= x[2],TIME="";
-
-if(H==0) TIME= M+":"+S;
-if(H>0) TIME= H+":"+M+":"+S;	
-
-return TIME;
-}
-
-
-let currenttime= select("#currenttime");
-
-audio.ontimeupdate=()=>{
-input.value= audio.currentTime;		
-select("#start").innerHTML= formatTime(audio.currentTime);
-
-if(audio.currentTime==audio.duration){
-input.value=0;		
-currenttime.innerHTML=select("#start").innerHTML= "00:00";		
-playx.innerHTML= play;				
-}
-
-currenttime.innerHTML= formatTime(audio.currentTime);
-
-};
-
-
-
-input.oninput=()=>{
-currenttime.innerHTML=select("#start").innerHTML= formatTime(input.value);
-audio.currentTime= input.value;
-audio.play();
-};
-
-
-let minus= `<svg viewBox="0 0 64 64">
-<path d="M2 26h60v12H2z"/>
-</svg>`;			
-					
-let plus= `	
-<svg viewBox="0 0 64 64">
-<path d="M38 26V2H26v24H2v12h24v24h12V38h24V26z"/>
+//Play and pause icons
+let playicon= `<svg viewBox="0 0 32 32">
+<path d="M6 4l20 12-20 12z"></path>
 </svg>`;
 
-let decr= `<svg viewBox="0 0 16 16"><g fill="black">
+let pauseicon= `<svg viewBox="0 0 32 32">
+<path d="M4 4h10v24h-10zM18 4h10v24h-10z"></path>
+</svg>`;
+
+let minus= `<svg viewBox="0 0 16 16">
+<g fill="black">
 <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 
 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 
 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
 <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 
-1h-7A.5.5 0 0 1 4 8z"/></g>
+1h-7A.5.5 0 0 1 4 8z"/>
+</g>
 </svg>`;
 
-
-
-let incr= `<svg viewBox="0 0 16 16"><g fill="black">
+let plus= `<svg viewBox="0 0 16 16">
+<g fill="black">
 <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 
 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 
 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 
-0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/></g>
+0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+</g>
 </svg>`;
 
+//Universal selectors
+let _audio= select("audio.player"),
+_source= select(".source"),
+_add= select("#add"),
+_play= select("#play"),
+_time= select(".time"),
+_seekbar= select(".progress"),
+_totaltime= select(".totaltime"),
+_decrease= select("#decrease"),
+_interval= select("input.interval"),
+_increase= select("#increase");
 
-let decrease= select("#decrease"),
-increase= select("#increase");
+_decrease.innerHTML= minus;
+_increase.innerHTML= plus;
+
+//Add source on button click
+_add.onclick=()=>{
+if(_source.value!=""){
+_audio.src= _source.value;
+_audio.load();
+}
+};
+
+_play.innerHTML= playicon;
+//Control play-pause button
+_play.onclick= function(){
+if(_audio.duration){
+if(!_audio.paused) _audio.pause();
+else _audio.play();
+this.innerHTML= _audio.paused ? playicon : pauseicon;	
+}
+};
 
 
-decrease.innerHTML= decr;
-increase.innerHTML= incr;
+//When audio information is loaded
+_audio.onloadedmetadata= function(){
+_seekbar.min= 0;
+_seekbar.max= this.duration;
+_totaltime.innerHTML= formatTime(this.duration);
+};
 
-let dur= 0;
 
-function seekAudio(x){
-/*if(dur<audio.duration) dur= 0;
-if(dur>audio.duration) dur= audio.duration;*/
-currenttime.innerHTML=select("#start").innerHTML=  formatTime(audio.currentTime + x);
-audio.currentTime= audio.currentTime + x;
-//audio.load(); audio.play();
+//When playing or paused
+_audio.onpause= _audio.onplay= function(){
+_play.innerHTML= this.paused ? playicon : pauseicon;	
+};
+
+//During playing
+_audio.ontimeupdate= function(){
+_seekbar.value= this.currentTime;
+_time.innerHTML= formatTime(this.currentTime);
+
+if(this.currentTime==this.duration){
+_seekbar.value= 0;
+_time.innerHTML= "00:00";
+_play.innerHTML= playicon;
+}
+
+};
+
+//Control timestamp via progress bar
+_seekbar.oninput= function(){
+if(_audio.duration){
+_time.innerHTML= formatTime(this.value);
+_audio.currentTime= this.value;
+_audio.play();
+}
+};
+
+
+//Function to format time into hms format
+function formatTime(time){
+let hms= new Date(time*1000).toISOString();
+    hms= hms.substr(11,8).split(":");
+    
+let h= hms[0], m= hms[1], s= hms[2];
+return (h>0) ? `${h}:${m}:${s}` : `${m}:${s}`;
 }
 
 
+//Function to skip time on click
+function seekAudio(interval){
+if(_audio.currentTime>0){
+let _newtime= _audio.currentTime + interval;
+_time.innerHTML= formatTime(_newtime);
+_seekbar.value= _audio.currentTime= _audio.currentTime + interval;
+_audio.play();
+}
+}
 
+//Increase and decrease mechanism-----
 let _timer;
 
-decrease.ontouchstart= function(e){
+_decrease.ontouchstart= function(e){
 this.classList.add("hover");
 _timer= setInterval(()=>{
-seekAudio(-5);
+seekAudio(Number(_interval.value)*-1);
 }, 50);
 return false;
 };
 
-
-increase.ontouchstart= function(e){
+_increase.ontouchstart= function(e){
 this.classList.add("hover");
 _timer= setInterval(()=>{
-seekAudio(5);
+seekAudio(Number(_interval.value));
 }, 50);
 return false;
 };
-
 
 document.body.ontouchend=()=>{
-increase.classList.remove("hover");
-decrease.classList.remove("hover");
+_increase.classList.remove("hover");
+_decrease.classList.remove("hover");
 clearInterval(_timer);
 //return false;
 };
 
-
-</script>
+</script>	
 </body>
 </html>
