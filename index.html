@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
 <meta charset="UTF-8">
 <meta name="theme-color" content="black"/>
@@ -9,7 +11,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>Audio Player</title>
+<title>Audio</title>
 
 <style>				
 *{
@@ -304,8 +306,10 @@ return (h>0) ? `${h}:${m}:${s}` : `${m}:${s}`;
 function seekAudio(interval){
 if(_audio.currentTime>0){
 let _newtime= _audio.currentTime + interval;
+if(_newtime >= _audio.duration) _newtime= _audio.duration;
+if(_newtime <= 0) _newtime= 0;
 _time.innerHTML= formatTime(_newtime);
-_seekbar.value= _audio.currentTime= _audio.currentTime + interval;
+_seekbar.value= _audio.currentTime= _newtime;
 _audio.play();
 }
 }
